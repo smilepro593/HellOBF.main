@@ -1,0 +1,125 @@
+-- =========================
+-- HELL MODE COMPLETE (FIXED)
+-- by Smile x Tuffmu
+-- =========================
+
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+
+-- BLOCK MODE KHÁC
+pcall(function()
+	for _,v in pairs(getgc(true)) do
+		if typeof(v) == "function" then
+			local info = debug.getinfo(v)
+			if info.name and (
+				info.name:lower():find("hell") or
+				info.name:lower():find("broken") or
+				info.name:lower():find("ultra") or
+				info.name:lower():find("hard")
+			) then
+				debug.setupvalue(v,1,false)
+			end
+		end
+	end
+end)
+
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+
+local Stats = RS:WaitForChild("GameStats")
+local LatestRoom = Stats:WaitForChild("LatestRoom")
+
+--------------------------------------------------
+-- SPRINT
+--------------------------------------------------
+pcall(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/trungdepth-dot/Sprint-stamina-v2/refs/heads/main/Sprint",true))()
+end)
+
+--------------------------------------------------
+-- GUIDING CANDLE
+--------------------------------------------------
+pcall(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Junbbinopro/Guiding-light-candle/refs/heads/main/Candle"))()
+end)
+
+--------------------------------------------------
+-- CAPTION DOORS GỐC
+--------------------------------------------------
+pcall(function()
+	require(player.PlayerGui.MainUI.Initiator.Main_Game).caption("Hell Mode Activated", true)
+end)
+
+--------------------------------------------------
+-- CHỮ RAINBOW GÓC DƯỚI
+--------------------------------------------------
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel", gui)
+label.Size = UDim2.fromScale(0.4,0.05)
+label.Position = UDim2.fromScale(0.02,0.93)
+label.BackgroundTransparency = 1
+label.Text = "Hell Mode by Smile x Tuffmu"
+label.TextScaled = true
+label.Font = Enum.Font.GothamBold
+
+task.spawn(function()
+	local hue = 0
+	while true do
+		hue = (hue + 0.005) % 1
+		label.TextColor3 = Color3.fromHSV(hue,1,1)
+		task.wait(0.03)
+	end
+end)
+
+--------------------------------------------------
+-- ENTITY LIST (HELL MODE)
+--------------------------------------------------
+local EntityScripts = {
+	"https://raw.githubusercontent.com/Junbbinopro/Surge-entity/refs/heads/main/Surge",
+	"https://raw.githubusercontent.com/Junbbinopro/Shocker-entity/refs/heads/main/Shocker",
+	"https://raw.githubusercontent.com/J63633S/Laver-mode/refs/heads/main/Chaotic",
+	"https://raw.githubusercontent.com/Junbbinopro/Bluyer-entity/refs/heads/main/Bluyer",
+	"https://raw.githubusercontent.com/eoyoustme/ohh/refs/heads/main/Draft1",
+	"https://raw.githubusercontent.com/talales/Nhankg./refs/heads/main/Fluster",
+	"https://raw.githubusercontent.com/Junbbinopro/Trauma-entity/refs/heads/main/Trauma",
+	"https://raw.githubusercontent.com/eoyoustme/ohh/refs/heads/main/Torment12",
+	"https://raw.githubusercontent.com/Junbbinopro/Munci-entity/refs/heads/main/Munci-20",
+	"https://raw.githubusercontent.com/Junbbinopro/Hungerd/refs/heads/main/Entity",
+	"https://raw.githubusercontent.com/trungdepth-dot/Him-entity-doors/refs/heads/main/Him",
+	"https://raw.githubusercontent.com/Junbbinopro/Black-smile/refs/heads/main/Black",
+	"https://raw.githubusercontent.com/Junbbinopro/350-entity/refs/heads/main/350"
+}
+
+--------------------------------------------------
+-- SPAWN LOGIC (CỬA 10+)
+--------------------------------------------------
+local function spawnRandomEntity()
+	local url = EntityScripts[math.random(#EntityScripts)]
+	pcall(function()
+		loadstring(game:HttpGet(url))()
+	end)
+end
+
+LatestRoom.Changed:Connect(function(room)
+	if room < 10 then return end
+
+	local roll = math.random()
+
+	if roll <= 0.001 then
+		for i = 1, #EntityScripts do
+			task.spawn(spawnRandomEntity)
+		end
+	elseif roll <= 0.03 then
+		for i = 1, math.random(2,3) do
+			task.spawn(spawnRandomEntity)
+		end
+	else
+		task.spawn(spawnRandomEntity)
+	end
+end)
